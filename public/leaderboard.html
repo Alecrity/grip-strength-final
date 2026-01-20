@@ -5,270 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grip Strength Challenge - Live Leaderboard</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            background: #0a0a0a;
         }
         
         .leaderboard-container {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            position: relative;
-            min-height: 600px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-        
-        /* Animated background elements */
-        .bg-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .bg-element {
-            position: absolute;
-            opacity: 0.05;
-            font-size: 80px;
-            animation: float 20s infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-        
-        .content {
-            position: relative;
-            z-index: 10;
-            padding: 2rem;
-            color: white;
+            min-height: 100vh;
+            background: #0a0a0a;
+            color: #fff;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .header-icon {
-            font-size: 4rem;
-            margin-bottom: 10px;
+            padding: 40px 20px 30px;
+            border-bottom: 1px solid #222;
         }
         
         .header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
         }
         
-        .header p {
-            font-size: 1.1rem;
-            color: #93c5fd;
-            margin-bottom: 1rem;
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         .prizes-bar {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            gap: 50px;
+            padding: 25px 20px;
+            background: #111;
+            border-bottom: 1px solid #222;
         }
         
-        .prize-mini {
+        .prize-item {
             text-align: center;
         }
         
-        .prize-mini-icon {
-            font-size: 1.5rem;
+        .prize-place {
+            font-size: 0.7rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
         
-        .prize-mini-amount {
-            font-weight: bold;
+        .prize-amount {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #cc0000;
         }
-        
-        .prize-1st { color: #ffd700; }
-        .prize-2nd { color: #c0c0c0; }
-        .prize-3rd { color: #cd7f32; }
         
         .status-bar {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            font-size: 0.9rem;
-            color: #93c5fd;
-            margin-bottom: 2rem;
+            justify-content: space-between;
+            padding: 15px 25px;
+            font-size: 0.8rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #222;
         }
         
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .top-section {
-            margin-bottom: 2rem;
+        .content {
+            padding: 20px;
         }
         
         .section-title {
             text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ffd700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #666;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
         }
         
         .participant-row {
             display: flex;
             align-items: center;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 10px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            padding: 18px 20px;
+            margin-bottom: 8px;
+            background: #111;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .participant-row:hover {
+            background: #1a1a1a;
         }
         
         .rank-1 {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.3));
-            border-color: #ffd700;
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            border-left-color: #cc0000;
+            background: linear-gradient(90deg, rgba(204, 0, 0, 0.1) 0%, #111 100%);
         }
         
         .rank-2 {
-            background: linear-gradient(135deg, rgba(192, 192, 192, 0.2), rgba(169, 169, 169, 0.3));
-            border-color: #c0c0c0;
-            box-shadow: 0 6px 20px rgba(192, 192, 192, 0.3);
+            border-left-color: #888;
+            background: linear-gradient(90deg, rgba(136, 136, 136, 0.1) 0%, #111 100%);
         }
         
         .rank-3 {
-            background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(184, 115, 51, 0.3));
-            border-color: #cd7f32;
-            box-shadow: 0 6px 20px rgba(205, 127, 50, 0.3);
+            border-left-color: #8B4513;
+            background: linear-gradient(90deg, rgba(139, 69, 19, 0.1) 0%, #111 100%);
         }
         
         .rank-other {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(59, 130, 246, 0.5);
+            border-left-color: #333;
         }
         
-        .rank-icon {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            border-radius: 50%;
-            font-weight: bold;
-        }
-        
-        .rank-1 .rank-icon {
-            background: #ffd700;
-            color: #1f2937;
+        .rank-number {
+            width: 50px;
             font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
         }
         
-        .rank-2 .rank-icon {
-            background: #c0c0c0;
-            color: #1f2937;
-            font-size: 1.3rem;
+        .rank-1 .rank-number {
+            color: #cc0000;
         }
         
-        .rank-3 .rank-icon {
-            background: #cd7f32;
-            color: white;
-            font-size: 1.3rem;
+        .rank-2 .rank-number {
+            color: #888;
         }
         
-        .rank-other .rank-icon {
-            background: #3b82f6;
-            color: white;
-            font-size: 1rem;
+        .rank-3 .rank-number {
+            color: #8B4513;
         }
         
         .participant-info {
             flex: 1;
+            padding-left: 15px;
         }
         
         .participant-name {
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.1rem;
-            margin-bottom: 0.25rem;
+            margin-bottom: 3px;
         }
         
         .participant-company {
-            color: #93c5fd;
-            font-size: 0.9rem;
+            color: #555;
+            font-size: 0.85rem;
         }
         
         .participant-score {
-            font-weight: bold;
+            font-weight: 700;
             font-size: 1.3rem;
             text-align: right;
+            min-width: 100px;
         }
         
         .rank-1 .participant-score {
-            color: #ffd700;
+            color: #cc0000;
             font-size: 1.5rem;
         }
         
         .rank-2 .participant-score {
-            color: #c0c0c0;
-            font-size: 1.4rem;
+            color: #888;
         }
         
         .rank-3 .participant-score {
-            color: #cd7f32;
-            font-size: 1.4rem;
+            color: #8B4513;
         }
         
-        .participant-prize {
-            margin-left: 10px;
+        .score-unit {
             font-size: 0.8rem;
-            opacity: 0.8;
+            font-weight: 400;
+            color: #555;
+            margin-left: 4px;
+        }
+        
+        .prize-tag {
+            font-size: 0.7rem;
+            color: #cc0000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
         }
         
         .divider {
-            display: flex;
-            align-items: center;
-            margin: 2rem 0;
-            color: #93c5fd;
-        }
-        
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: #3b82f6;
-        }
-        
-        .divider-text {
-            padding: 0 1rem;
-            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            color: #444;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         .scrollable-section {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            border: 2px solid #3b82f6;
             max-height: 300px;
             overflow-y: auto;
-            padding: 1rem;
+            border: 1px solid #222;
+            background: #0d0d0d;
         }
         
         .scrollable-section .participant-row {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.1);
-            margin-bottom: 0.25rem;
-            padding: 0.75rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 14px 20px;
         }
         
         .scrollable-section .participant-name {
@@ -277,73 +233,70 @@
         
         .scrollable-section .participant-score {
             font-size: 1.1rem;
-            color: #93c5fd;
+            color: #888;
         }
         
         .footer {
             text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(59, 130, 246, 0.3);
-            color: #93c5fd;
-            font-size: 0.9rem;
+            padding: 30px 20px;
+            border-top: 1px solid #222;
+            margin-top: 30px;
+        }
+        
+        .footer p {
+            color: #444;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
         
         .loading {
             text-align: center;
-            color: #93c5fd;
-            font-size: 1.1rem;
-            padding: 2rem;
-        }
-        
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #93c5fd;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            color: #555;
+            padding: 60px 20px;
+            font-size: 0.9rem;
         }
         
         .no-data {
             text-align: center;
-            color: #93c5fd;
-            padding: 3rem;
+            color: #444;
+            padding: 80px 20px;
+        }
+        
+        .no-data-title {
             font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .no-data-subtitle {
+            font-size: 0.9rem;
         }
         
         /* Mobile responsiveness */
         @media (max-width: 600px) {
-            .content {
-                padding: 1rem;
-            }
-            
             .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .header-icon {
-                font-size: 3rem;
-            }
-            
-            .status-bar {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: center;
+                font-size: 1.4rem;
+                letter-spacing: 2px;
             }
             
             .prizes-bar {
-                gap: 1rem;
+                gap: 25px;
+            }
+            
+            .prize-amount {
+                font-size: 1.2rem;
             }
             
             .participant-row {
-                padding: 0.75rem;
+                padding: 15px;
+            }
+            
+            .rank-number {
+                width: 40px;
+                font-size: 1.2rem;
             }
             
             .participant-name {
@@ -351,83 +304,71 @@
             }
             
             .participant-score {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
+                min-width: 80px;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
             }
         }
         
         /* Scrollbar styling */
         .scrollable-section::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         
         .scrollable-section::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: #111;
         }
         
         .scrollable-section::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 10px;
+            background: #333;
         }
         
         .scrollable-section::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
+            background: #444;
         }
     </style>
 </head>
 <body>
     <div class="leaderboard-container">
-        <!-- Background elements -->
-        <div class="bg-elements" id="bgElements"></div>
+        <div class="header">
+            <h1>Grip Strength Challenge</h1>
+            <p class="header-subtitle">Live Leaderboard</p>
+        </div>
+        
+        <div class="prizes-bar">
+            <div class="prize-item">
+                <div class="prize-place">1st Place</div>
+                <div class="prize-amount">$200</div>
+            </div>
+            <div class="prize-item">
+                <div class="prize-place">2nd Place</div>
+                <div class="prize-amount">$100</div>
+            </div>
+            <div class="prize-item">
+                <div class="prize-place">3rd Place</div>
+                <div class="prize-amount">$50</div>
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <span id="totalCompetitors">0 Competitors</span>
+            <span id="lastUpdated">Loading...</span>
+        </div>
         
         <div class="content">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-icon">💪</div>
-                <h1>GRIP STRENGTH CHALLENGE</h1>
-                <p>Live Competition Leaderboard</p>
-                
-                <!-- Mini prizes display -->
-                <div class="prizes-bar">
-                    <div class="prize-mini">
-                        <div class="prize-mini-icon">🥇</div>
-                        <div class="prize-mini-amount prize-1st">$200</div>
-                    </div>
-                    <div class="prize-mini">
-                        <div class="prize-mini-icon">🥈</div>
-                        <div class="prize-mini-amount prize-2nd">$100</div>
-                    </div>
-                    <div class="prize-mini">
-                        <div class="prize-mini-icon">🥉</div>
-                        <div class="prize-mini-amount prize-3rd">$50</div>
-                    </div>
-                </div>
-                
-                <div class="status-bar">
-                    <div class="status-item">
-                        <span>👥</span>
-                        <span id="totalCompetitors">0 Competitors</span>
-                    </div>
-                    <div class="status-item">
-                        <span id="refreshIcon">🔄</span>
-                        <span id="lastUpdated">Loading...</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main content -->
             <div id="leaderboardContent">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading competition results...
-                </div>
+                <div class="loading">Loading results...</div>
             </div>
-            
-            <!-- Footer -->
-            <div class="footer">
-                <p>Updates automatically every 5 seconds</p>
-                <p>Powered by Universal Truck Service</p>
-            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Updates automatically every 5 seconds</p>
+            <p>Universal Truck Service</p>
         </div>
     </div>
 
@@ -435,40 +376,14 @@
         let participants = [];
         let isRefreshing = false;
         
-        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            createBackgroundElements();
             loadLeaderboard();
-            
-            // Auto-refresh every 5 seconds
             setInterval(loadLeaderboard, 5000);
         });
         
-        // Create background elements
-        function createBackgroundElements() {
-            const container = document.getElementById('bgElements');
-            const elements = ['💪', '🏆', '⭐'];
-            const numberOfElements = 15;
-            
-            for (let i = 0; i < numberOfElements; i++) {
-                const el = document.createElement('div');
-                el.className = 'bg-element';
-                el.innerHTML = elements[Math.floor(Math.random() * elements.length)];
-                el.style.left = Math.random() * 100 + '%';
-                el.style.top = Math.random() * 100 + '%';
-                el.style.animationDelay = Math.random() * 20 + 's';
-                el.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                container.appendChild(el);
-            }
-        }
-        
-        // Load leaderboard data
         async function loadLeaderboard() {
             if (isRefreshing) return;
-            
             isRefreshing = true;
-            const refreshIcon = document.getElementById('refreshIcon');
-            refreshIcon.style.animation = 'spin 1s linear infinite';
             
             try {
                 const response = await fetch('/api/leaderboard');
@@ -483,28 +398,23 @@
             }
             
             isRefreshing = false;
-            refreshIcon.style.animation = '';
         }
         
-        // Update status bar
         function updateStatusBar() {
-            const totalElement = document.getElementById('totalCompetitors');
-            const updatedElement = document.getElementById('lastUpdated');
-            
-            totalElement.textContent = `${participants.length} Competitor${participants.length !== 1 ? 's' : ''}`;
-            updatedElement.textContent = `Updated ${formatTime(new Date())}`;
+            document.getElementById('totalCompetitors').textContent = 
+                `${participants.length} Competitor${participants.length !== 1 ? 's' : ''}`;
+            document.getElementById('lastUpdated').textContent = 
+                `Updated ${formatTime(new Date())}`;
         }
         
-        // Display leaderboard
         function displayLeaderboard() {
             const container = document.getElementById('leaderboardContent');
             
             if (participants.length === 0) {
                 container.innerHTML = `
                     <div class="no-data">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">💪</div>
-                        <p>No scores recorded yet!</p>
-                        <p style="margin-top: 0.5rem; font-size: 1rem;">Think you've got the grip? Step up and compete!</p>
+                        <div class="no-data-title">No Scores Recorded</div>
+                        <div class="no-data-subtitle">Competition results will appear here</div>
                     </div>
                 `;
                 return;
@@ -514,22 +424,15 @@
             const remaining = participants.slice(10);
             
             let html = `
-                <div class="top-section">
-                    <div class="section-title">🏆 Top 10 🏆</div>
-                    ${top10.map((participant, index) => createParticipantRow(participant, index + 1)).join('')}
-                </div>
+                <div class="section-title">Top 10</div>
+                ${top10.map((p, i) => createParticipantRow(p, i + 1)).join('')}
             `;
             
             if (remaining.length > 0) {
                 html += `
-                    <div class="divider">
-                        <div class="divider-line"></div>
-                        <div class="divider-text">All Participants</div>
-                        <div class="divider-line"></div>
-                    </div>
-                    
+                    <div class="divider">All Participants</div>
                     <div class="scrollable-section">
-                        ${remaining.map((participant, index) => createParticipantRow(participant, index + 11, true)).join('')}
+                        ${remaining.map((p, i) => createParticipantRow(p, i + 11, true)).join('')}
                     </div>
                 `;
             }
@@ -537,53 +440,47 @@
             container.innerHTML = html;
         }
         
-        // Create participant row HTML
         function createParticipantRow(participant, position, isScrollable = false) {
             let rankClass = 'rank-other';
-            let rankIcon = position;
-            let prizeText = '';
+            let prizeTag = '';
             
             if (!isScrollable) {
                 if (position === 1) {
                     rankClass = 'rank-1';
-                    rankIcon = '👑';
-                    prizeText = '<span class="participant-prize">$200</span>';
+                    prizeTag = '<div class="prize-tag">$200 Prize</div>';
                 } else if (position === 2) {
                     rankClass = 'rank-2';
-                    rankIcon = '🥈';
-                    prizeText = '<span class="participant-prize">$100</span>';
+                    prizeTag = '<div class="prize-tag">$100 Prize</div>';
                 } else if (position === 3) {
                     rankClass = 'rank-3';
-                    rankIcon = '🥉';
-                    prizeText = '<span class="participant-prize">$50</span>';
+                    prizeTag = '<div class="prize-tag">$50 Prize</div>';
                 }
             }
             
             return `
                 <div class="participant-row ${rankClass}">
-                    <div class="rank-icon">${rankIcon}</div>
+                    <div class="rank-number">${position}</div>
                     <div class="participant-info">
                         <div class="participant-name">${participant.name}</div>
                         <div class="participant-company">${participant.company || ''}</div>
                     </div>
-                    <div class="participant-score">${participant.score} lbs${prizeText}</div>
+                    <div class="participant-score">
+                        ${participant.score}<span class="score-unit">lbs</span>
+                        ${prizeTag}
+                    </div>
                 </div>
             `;
         }
         
-        // Display error message
         function displayError() {
-            const container = document.getElementById('leaderboardContent');
-            container.innerHTML = `
+            document.getElementById('leaderboardContent').innerHTML = `
                 <div class="no-data">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
-                    <p>Unable to load competition results</p>
-                    <p style="margin-top: 0.5rem; font-size: 1rem;">Please check your connection. The leaderboard will automatically retry.</p>
+                    <div class="no-data-title">Connection Error</div>
+                    <div class="no-data-subtitle">Retrying automatically...</div>
                 </div>
             `;
         }
         
-        // Format time for display
         function formatTime(date) {
             return date.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
