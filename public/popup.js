@@ -1,23 +1,20 @@
 // Grip Strength Challenge Registration Popup
-// Embeds on Universal Truck Service website
+// Add to WordPress by including this script
 
 (function() {
     'use strict';
     
-    // Configuration - UPDATE THIS URL AFTER DEPLOYING TO RAILWAY
-    const API_BASE = 'https://YOUR-RAILWAY-APP-URL.railway.app/api';
-    const POPUP_REAPPEAR_DELAY = 45000; // 45 seconds
+    const API_BASE = 'https://grip-strength-final-production.up.railway.app/api';
+    const POPUP_REAPPEAR_DELAY = 60000; // 60 seconds
     
     let popupShown = false;
     let registrationComplete = false;
     let participantCount = 0;
     
-    // Check if user already registered
     if (localStorage.getItem('gripStrengthRegistered')) {
         registrationComplete = true;
     }
     
-    // Create popup HTML
     function createPopupHTML() {
         return `
             <div id="gripStrengthPopup" style="
@@ -26,39 +23,37 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0,0,0,0.85);
+                background: rgba(0,0,0,0.9);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 99999;
-                font-family: Arial, sans-serif;
+                font-family: 'Segoe UI', Arial, sans-serif;
             ">
                 <div style="
-                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-                    border-radius: 20px;
-                    padding: 2rem;
-                    max-width: 500px;
+                    background: #0a0a0a;
+                    border: 1px solid #333;
+                    padding: 40px;
+                    max-width: 450px;
                     width: 90%;
                     position: relative;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
                     max-height: 90vh;
                     overflow-y: auto;
-                    border: 2px solid #ffd700;
                 ">
                     <span id="gripStrengthClose" style="
                         position: absolute;
                         top: 15px;
                         right: 20px;
-                        font-size: 28px;
+                        font-size: 24px;
                         cursor: pointer;
-                        color: #93c5fd;
+                        color: #555;
                         font-weight: bold;
-                    ">&times;</span>
+                    ">✕</span>
                     
-                    <div style="text-align: center; margin-bottom: 1.5rem;">
-                        <div style="font-size: 60px; margin-bottom: 10px;">💪</div>
-                        <h2 style="margin: 0 0 5px 0; font-size: 26px; color: #ffd700;">GRIP STRENGTH CHALLENGE</h2>
-                        <p style="margin: 0; color: #93c5fd; font-size: 1.1rem;">Test Your Strength. Win Big!</p>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <p style="font-size: 0.75rem; color: #cc0000; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0;">Join the Competition</p>
+                        <h2 style="margin: 0 0 8px 0; font-size: 1.6rem; color: #fff; text-transform: uppercase; letter-spacing: 2px;">Grip Strength Challenge</h2>
+                        <p style="margin: 0; color: #666; font-size: 0.9rem;">Register to compete for cash prizes</p>
                     </div>
                     
                     <!-- Prizes -->
@@ -66,133 +61,124 @@
                         display: flex;
                         justify-content: center;
                         gap: 20px;
-                        margin-bottom: 1.5rem;
+                        margin-bottom: 25px;
+                        padding: 15px 0;
+                        border-top: 1px solid #222;
+                        border-bottom: 1px solid #222;
                     ">
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5rem;">🥇</div>
-                            <div style="font-weight: bold; color: #ffd700;">$200</div>
+                            <div style="font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 1px;">1st</div>
+                            <div style="font-weight: 700; color: #cc0000; font-size: 1.1rem;">$200</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5rem;">🥈</div>
-                            <div style="font-weight: bold; color: #c0c0c0;">$100</div>
+                            <div style="font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 1px;">2nd</div>
+                            <div style="font-weight: 700; color: #888; font-size: 1.1rem;">$100</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5rem;">🥉</div>
-                            <div style="font-weight: bold; color: #cd7f32;">$50</div>
+                            <div style="font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 1px;">3rd</div>
+                            <div style="font-weight: 700; color: #8B4513; font-size: 1.1rem;">$50</div>
                         </div>
                     </div>
                     
                     <div id="gripStrengthCounter" style="
-                        background: rgba(255, 215, 0, 0.1);
-                        border: 2px solid #ffd700;
-                        border-radius: 8px;
+                        background: #111;
+                        border: 1px solid #222;
                         padding: 12px;
-                        margin-bottom: 1.5rem;
+                        margin-bottom: 25px;
                         text-align: center;
-                        color: #ffd700;
-                        font-weight: bold;
+                        color: #888;
+                        font-size: 0.85rem;
                     ">
-                        Join <span id="gripStrengthCount">${participantCount}</span> others competing for prizes!
+                        <span id="gripStrengthCount">${participantCount}</span> competitors registered
                     </div>
                     
                     <div id="gripStrengthSuccess" style="
-                        background: rgba(16, 185, 129, 0.2);
-                        border: 2px solid #10b981;
-                        color: #6ee7b7;
+                        background: rgba(0, 150, 0, 0.1);
+                        border: 1px solid #0a0;
+                        color: #0c0;
                         padding: 20px;
-                        border-radius: 8px;
                         text-align: center;
-                        font-weight: bold;
-                        margin-bottom: 1.5rem;
+                        font-weight: 600;
+                        margin-bottom: 20px;
                         display: none;
                     ">
-                        ✅ Registration successful! Head to the competition area when ready.
+                        Registration successful. Head to the competition area when ready.
                     </div>
                     
                     <form id="gripStrengthForm">
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #93c5fd;">Full Name *</label>
-                            <input type="text" id="gripStrengthName" name="name" required style="
+                        <div style="margin-bottom: 15px;">
+                            <input type="text" id="gripStrengthName" name="name" placeholder="Full Name *" required style="
                                 width: 100%;
-                                padding: 12px;
-                                border: 2px solid #3b82f6;
-                                border-radius: 8px;
-                                font-size: 16px;
+                                padding: 14px;
+                                border: 1px solid #333;
+                                font-size: 1rem;
                                 box-sizing: border-box;
-                                background: rgba(0,0,0,0.3);
-                                color: white;
+                                background: #111;
+                                color: #fff;
                             ">
                         </div>
                         
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #93c5fd;">Email Address *</label>
-                            <input type="email" id="gripStrengthEmail" name="email" required style="
+                        <div style="margin-bottom: 15px;">
+                            <input type="email" id="gripStrengthEmail" name="email" placeholder="Email Address *" required style="
                                 width: 100%;
-                                padding: 12px;
-                                border: 2px solid #3b82f6;
-                                border-radius: 8px;
-                                font-size: 16px;
+                                padding: 14px;
+                                border: 1px solid #333;
+                                font-size: 1rem;
                                 box-sizing: border-box;
-                                background: rgba(0,0,0,0.3);
-                                color: white;
+                                background: #111;
+                                color: #fff;
                             ">
                         </div>
                         
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #93c5fd;">Phone Number *</label>
-                            <input type="tel" id="gripStrengthPhone" name="phone" required style="
+                        <div style="margin-bottom: 15px;">
+                            <input type="tel" id="gripStrengthPhone" name="phone" placeholder="Phone Number *" required style="
                                 width: 100%;
-                                padding: 12px;
-                                border: 2px solid #3b82f6;
-                                border-radius: 8px;
-                                font-size: 16px;
+                                padding: 14px;
+                                border: 1px solid #333;
+                                font-size: 1rem;
                                 box-sizing: border-box;
-                                background: rgba(0,0,0,0.3);
-                                color: white;
+                                background: #111;
+                                color: #fff;
                             ">
                         </div>
                         
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #93c5fd;">Company/Organization *</label>
-                            <input type="text" id="gripStrengthCompany" name="company" required style="
+                        <div style="margin-bottom: 20px;">
+                            <input type="text" id="gripStrengthCompany" name="company" placeholder="Company / Organization *" required style="
                                 width: 100%;
-                                padding: 12px;
-                                border: 2px solid #3b82f6;
-                                border-radius: 8px;
-                                font-size: 16px;
+                                padding: 14px;
+                                border: 1px solid #333;
+                                font-size: 1rem;
                                 box-sizing: border-box;
-                                background: rgba(0,0,0,0.3);
-                                color: white;
+                                background: #111;
+                                color: #fff;
                             ">
                         </div>
                         
                         <button type="submit" id="gripStrengthSubmit" style="
                             width: 100%;
-                            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+                            background: #cc0000;
                             color: white;
                             border: none;
-                            padding: 15px;
-                            border-radius: 8px;
-                            font-size: 18px;
-                            font-weight: bold;
+                            padding: 16px;
+                            font-size: 1rem;
+                            font-weight: 600;
                             cursor: pointer;
-                            transition: all 0.3s ease;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
                         ">
-                            💪 Join the Challenge!
+                            Register Now
                         </button>
                     </form>
                     
-                    <p style="text-align: center; margin-top: 1rem; font-size: 12px; color: #93c5fd;">
-                        Your information is secure and will only be used for this competition.
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.75rem; color: #444;">
+                        Your information will only be used for this competition.
                     </p>
                 </div>
             </div>
         `;
     }
     
-    // Show popup
     function showPopup() {
-        // If already shown and visible, don't create duplicate
         if (document.getElementById('gripStrengthPopup')) return;
         
         const popup = document.createElement('div');
@@ -201,14 +187,11 @@
         
         popupShown = true;
         
-        // Load participant count
         loadParticipantCount();
         
-        // Add event listeners
         document.getElementById('gripStrengthClose').addEventListener('click', closePopup);
         document.getElementById('gripStrengthForm').addEventListener('submit', handleSubmit);
         
-        // Close popup when clicking outside
         document.getElementById('gripStrengthPopup').addEventListener('click', function(e) {
             if (e.target.id === 'gripStrengthPopup') {
                 closePopup();
@@ -216,7 +199,6 @@
         });
     }
     
-    // Close popup
     function closePopup() {
         const popup = document.getElementById('gripStrengthPopup');
         if (popup) {
@@ -225,7 +207,6 @@
         }
     }
     
-    // Load participant count
     async function loadParticipantCount() {
         try {
             const response = await fetch(`${API_BASE}/count`);
@@ -239,7 +220,6 @@
         }
     }
     
-    // Handle form submission
     async function handleSubmit(e) {
         e.preventDefault();
         
@@ -266,18 +246,13 @@
             });
             
             if (response.ok) {
-                // Success
                 localStorage.setItem('gripStrengthRegistered', 'true');
                 registrationComplete = true;
                 
-                // Hide form, show success message
                 document.getElementById('gripStrengthForm').style.display = 'none';
+                document.getElementById('gripStrengthCounter').style.display = 'none';
                 document.getElementById('gripStrengthSuccess').style.display = 'block';
                 
-                // Update participant count
-                loadParticipantCount();
-                
-                // Close popup after 3 seconds
                 setTimeout(closePopup, 3000);
                 
             } else {
@@ -288,18 +263,15 @@
             alert('Network error. Please check your connection.');
         }
         
-        submitBtn.textContent = '💪 Join the Challenge!';
+        submitBtn.textContent = 'Register Now';
         submitBtn.disabled = false;
     }
     
-    // Initialize popup behavior
     function init() {
         if (registrationComplete) return;
         
-        // Show popup after 1 second
-        setTimeout(showPopup, 1000);
+        setTimeout(showPopup, 2000);
         
-        // Set up reappearance timer
         setInterval(() => {
             if (!registrationComplete && !popupShown) {
                 showPopup();
@@ -307,12 +279,10 @@
         }, POPUP_REAPPEAR_DELAY);
     }
     
-    // Expose function to manually trigger popup (for "Sign Up Now" button)
     window.openGripStrengthPopup = function() {
         showPopup();
     };
     
-    // Start when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
